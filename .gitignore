@@ -6,3 +6,5 @@
 .metadata
 /bin/
 gitlog.txt
+*.pyc
+__pycache__/
