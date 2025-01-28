@@ -1,0 +1,21 @@
+Author: Ty Gazaway
+Section: C
+
+1. The call to the java library occured on line 32 in the method firstRepeatedCharacter
+
+2. I would fix the error by reducing the index in which the for loop stops at by one, specifically changing
+"i < word.length()" to "i < word.length()-1". This is because the if statement that causes the error is
+checking the character at the current index against the next index in the array. Which causes the loop
+to index out of bounds of the word when it reaches the last index, and tries to check the next nonexistent
+index.
+
+3. During the first run adding the new line changed nothing, but after adding the command line instruction
+to VM arguments the error changed to an assertion error in the constructor.
+
+4. Yes it is correct
+
+5. The index is 2 which is not what we expect, the expected
+index of the first count increment is index 0.
+
+6. The bug is that the loop starts at index 1 and only checks for repeats moving forward.
+I would fix this bug by adding " || i == 0" to the inner if statement conditional.

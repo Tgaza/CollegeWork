@@ -1,0 +1,27 @@
+// rooms
+Room, Gryffindor Tower, G
+Room, Ravenclaw Tower, R
+Room, Slytherin Dungeon, S
+Room, Hufflepuff Commons, H
+Room, HeadMasters Office, O
+Room, Defence Tower, D
+Room, Transformation court, T
+Room, Library, L
+Room, Great Hall, F
+// other spaces
+Space, Unused, X
+Space, Walkway, W
+// People
+Person, Harry Potter, #CC3300
+Person, Ron Weasley, #FF9933
+Person, Draco Malfoy, #006600
+Person, Hermione Granger, #663300
+Person, Luna Lovegood, #0000CC
+Person, Cedric Diggory, #F8F200
+// Weapons
+Weapon, Elder Wand, buffer
+Weapon, Sword of Gryffindor, buffer
+Weapon, Hagrid's Crossbow, buffer
+Weapon, Basilisk Venom, buffer
+Weapon, Centaur Bow, buffer
+Weapon, Silver Dagger, buffer

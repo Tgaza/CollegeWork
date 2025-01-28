@@ -1,0 +1,25 @@
+- Board.java
+1. Renamed booardDimension, on line 9, to BOARD_DIMENSION to follow standard conventions for
+constant variables, and fix the spelling error.
+2. On lines 27 and 32 there is are newly created variables both called piece, which could
+cause confusion at a glance. Therefore, I renamed them to redPiece and BlackPiece respectively
+in order to prevent such confusion.
+3. On line 12, the variable boardPiecesArrayList is excessively long and verbose, therefore I reduced it
+to boardPieces.
+
+- Piece.java
+
+4. The Piece constructor was at the bottom of the class and so I moved it to the top.
+5. Changed king and color variables to be private because it was only public so Tile could 
+copy the draw method instead of calling it.
+6. There is no comment describing the draw method in Piece, so I added a comment above to describe it.
+
+- Tile.java
+
+7. Setters and getters should be at the bottom of the class and the setPiece method is in
+middle, therefore I moved it to the bottom.
+8. Attributes should be placed at the top of the class and the global Piece variable is on
+line 13, below the constructor, instead of at the top of the class. I moved it to the top
+9. In the comment for the draw method, it states that it should call the draw method
+from piece but instead it copy pasted it. I changed it so that it actually calls it.
+10. Tile does not have header that describes the class at the top of the file. I added that header.

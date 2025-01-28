@@ -1,0 +1,21 @@
+How I chose my test cells
+
+FourDoorDirections test cells{
+
+cell(6,16) this cell is a doorway that opens UP into the Gryffindoor Tower Room
+cell(11,3) this cell is a doorway that opens DOWN into the Great Hall Room
+cell(1,9) this cell is a doorway that opens LEFT into the Headmaster's Office Room
+cell(13,19) this cell is a doorway that opens RIGHT into the Transformation Court Room
+
+}
+
+TestRooms test cells{
+
+cell(3,15) this a basic room cell that is in Gryffindor Tower room right next to the label and center cells
+cell(23,10) this a center cell that is in Slytherin Dungeon and which is uniquely shaped
+cell(1,23) this a label cell that is in Defense Tower room and comes after all other types of cells in the same row
+cell(6,26) this a walkway cell that is in between the Defense Tower and some unused space on the edge of the board
+cell(24,0) this a secret passage cell that is in the Great hall and leads to Gryffindor Tower
+cell(2,21) this a unused cell that is nested in the side of Defense Tower on all on but one side
+
+}

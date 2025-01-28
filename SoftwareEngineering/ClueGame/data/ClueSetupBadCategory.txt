@@ -1,0 +1,13 @@
+// rooms
+Room, Gryffindor Tower, G
+Room, Ravenclaw Tower, R
+Room, Slytherin Dungeon, S
+Room, Hufflepuff Commons, H
+Room, HeadMasters Office, O
+Room, Defence Tower, D
+Room, Transformation court, T
+Room, Library, L
+Room, Great Hall, F
+// other spaces
+Spae, Unused, X
+Space, Walkway, Z
