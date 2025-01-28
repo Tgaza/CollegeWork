@@ -1,0 +1,39 @@
+---
+title: "Notes_10_29"
+output: html_document
+date: "2024-10-29"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Comparing methods:
+  A randomization distribution shows us EXACTLY how the sample statistics
+vary under Null, All other methods are only approx.
+
+```{r}
+
+```
+
+When we use Normal Distribution to calculate the p-value [N(0,1), or N(null, SE)] we are assuming that EXACT randomization distribution can be well approximated with a normal distribution.
+
+If our sample size(n) is too small, then the approx is NOT good, and the p-value using a Normal approx. is WRONG.
+
+On a day with 21 students present 19 of them had iPhones:
+
+  Proportion of randomization distr, stats > 19/21 is 0.079.
+  
+  Area under the Normal curve, 0.051.
+  
+
+What's realy happening with t-distrution:
+  Our goal is to use some example to really understand CT and approximation with a distribution.
+  can't use with small sample size that is skewed. Because look at bootstrap distribution and check.
+  Use t because we don't have standard deviation, because the standard error is not as accurate for approximationg p-value.
+  If you do have standard deviation then use normal distribution
+  Remember using that using s instead of sigma introduces extra problems.
+  
+  

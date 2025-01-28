@@ -1,0 +1,8 @@
+*.class
+*.zip
+.project
+.classpath
+.settings/
+.metadata
+/bin/
+gitlog.txt

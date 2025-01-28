@@ -1,0 +1,38 @@
+---
+title: "Ty's Code"
+output: html_notebook
+---
+
+```{r, echo = F, message = F}
+# Clear workspace
+rm(list = ls()) 
+
+# your code will be included in the html for this assignment
+knitr::opts_chunk$set(echo=TRUE) 
+
+# load packages we need for this lab
+library(mosaic, warn.conflicts = FALSE) 
+library(ggformula, warn.conflicts = FALSE)
+library(Lock5Data, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+
+```
+
+```{r}
+RawData <- read.csv(file.choose())
+glimpse(RawData)
+
+```
+
+```{r}
+q1Data <- RawData |> select(incident_id, offense_type_id, day) |> #get rid of all variables other than those we care about
+            mutate(isBurglary = case_when(grepl("burg", offense_type_id)|grepl("burglary", offense_type_id) ~ "Yes", #create new variable that is yes if the crime for the incident is a burglary
+                                                        .default = "No")) |> #Otherwise no
+            mutate(isWeekend = case_when(grepl("Saturday", day)|grepl("Sunday", day) ~ "Yes", #create a new variable that is yes for weekend days
+                                                        .default = "No"))|> #Otherwise no
+            na.omit() #clean out bad data
+glimpse(q1Data)
+tally(~isBurglary, data = q1Data)
+tally(~offense_type_id, data = q1Data)
+
+```

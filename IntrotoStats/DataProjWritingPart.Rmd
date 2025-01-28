@@ -1,0 +1,111 @@
+---
+title: "Group Project"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r}
+# Clear workspace
+rm(list = ls()) 
+
+# your code will NOT be included in the html for this assignment
+knitr::opts_chunk$set(echo=FALSE) 
+# your output will NOT be included in the html for this assignment (except figures at the end)
+knitr::opts_chunk$set(include=FALSE) 
+
+# load packages we need for this lab
+library(mosaic, warn.conflicts = FALSE) 
+library(ggformula, warn.conflicts = FALSE)
+library(Lock5Data, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+
+
+# Load your data
+CrimeDataRaw <- read.csv(file.choose())
+
+# Perform any necessary transformations
+
+assaultData <- CrimeDataRaw |> select(incident_id, offense_type_id, day) |> #get rid of all variables other than those we care about
+            mutate(isAssault = case_when(grepl("aslt", offense_type_id)|grepl("assault", offense_type_id) ~ "Yes", #create new variable that is yes if the crime for the incident is Assault
+                                                        .default = "No")) |> #Otherwise no
+            mutate(isWeekend = case_when(grepl("Saturday", day)|grepl("Sunday", day) ~ "Yes", #create a new variable that is yes for weekend days
+                                                        .default = "No"))|> #Otherwise no
+            na.omit() #clean out bad data
+
+```
+
+
+## Introduction
+
+We considered 75,000 reported crimes across various neighborhoods in Colorado. The recorded data includes the time, date, neighborhood, and victim count associated with each crime. It also includes the total population, median home value, median rent, and various other population demographic proportions for each of the given neighborhoods. Our goal is to identify relationships (or lack of relationships) between the rates of assault on weekdays vs weekends and to test whether or not a relationship exists between the crime rate and percentage of each neighborhood's population that is male. Is assault more likely to be committed on a weekend versus a weekday? Is there a correlation between the percentage of a neighborhood's population that is male and the crime rate of that neighborhood?
+  
+## Is a Denver resident more likely to be assaulted, compared to other crime, on a weekday compared to a day on the weekend?
+
+We summarized the number of assaults per day of the week and divided it by the total number of crimes to get the rate of assaults in relation to the other crimes. Then, we grouped the data by the day of the week and compared the proportions for weekdays vs weekends.
+
+H0: p_nE - p_nD = 0
+
+Ha: p_nE - p_nD > 0
+
+p_nE is the normalized proportion of the p_E proportion, and p_nD is the normalized proportion of the p_D proportion.
+
+We used a bar chart to visualize the proportions of assaults for each day of the week. This showed only a slight increase on the weekends compared to weekdays. This showed us that there may be some relationship between the two variables, but we were not confident in its statistical significance.
+
+In order to test for the 
+
+```{r} 
+# Code for viewing the dataset, uncomment to view
+# glimpse(assaultData)
+# tally(~isAssault, data = assaultData)
+# tally(~offense_type_id, data = assaultData)
+# tally(isWeekend~isAssault, data = assaultData)
+```
+
+  
+## Is there a positive correlation between the crime rate of a given neighborhood and the percentage of that neighborhood that is male?
+
+We created a new dataset called "new" by transforming the Fall24_DenverCrimeData dataset. We then grouped the data by neighborhood name. For each neighborhood, we calculated the total number of crimes (n) and the crime rate (crimeRate) by dividing the total number of crimes per neighborhood by the total population of each neighborhood. We also kept the existing values for percentMale and pop variables from the original dataset. Finally, we filtered out non-distinct rows and removed an outlier by filtering out neighborhoods with a crime rate greater than 1 (more crime than residents living in the neighborhood).
+
+H0: There is no correlation between the percent of males in a neighborhood and the average assault per thousand? person
+
+Ha: There is correlation between the percent of males in a neighborhood and the average assault per thousand person
+
+We visualized the data using a scatter plot with percentMale on the X-axis and crimeRate on the Y-axis. This displayed a slight linear correlation with most datapoints occuring at the bottom left corner of the plot. It appears from the figure that there will be a slight correlation, but we aren't sure if it will be statistically significant.
+
+We performed a correlation test using cor.test() to confirm this hypothesis. The resulting p-value is essentially 0 (2.26e-05). The resulting correlation coefficient is 0.466. We have strong evidence that there is a statistically significant positive correlation between the percentage of a neighborhood's population that is male and the crime rate of that neighborhood.
+
+\newpage
+
+## Figures
+
+```{r, include = T}
+
+gf_bar(day~isAssault, data = assaultData, fill = ~isAssault, position = "fill")
+
+```
+
+```{r, include = T}
+model = lm(crimeRate ~ percentMale, data = new)
+
+plot(new$percentMale,new$crimeRate, 
+     main='The correlation between crime rate and percentage male', 
+     xlab='Percent Male',ylab='Crime Rate')
+abline(model,col='red')  
+```
+
+# Appendix
+
+*Put your R code to perform the hypothesis tests here.  It must appear in your report with the output*
+
+```{r, include = T, echo = T}
+
+```
+
+```{r, include = T, echo = T}
+cor.test(crimeRate ~ percentMale, data = new)
+```
+
+
+
+

@@ -1,0 +1,125 @@
+---
+title: "6.1 Notes"
+output: html_notebook
+---
+
+6.1 Data wrangling
+
+Tidy Data{
+- each row is a case
+- each column is a variable
+- each cell contains one piece of information
+}
+
+Data Wrangling{
+A data journey does not start with analysis
+first have to get the raw data and filter/transform it into the desired format
+
+- you must have the tools to:
++Filter cases
++Transform values
++Summarize values
++Select Variables
+}
+
+Pipes{
+-providing arguments to a functions
+-takes the object 
+  |> takes abject on the left and makes it the first arg for th     function on the right.
+
+  read |> as "then"
+
+  x |> f(y) -> 
+}
+
+
+Data Verbs{
+These are used for extracting information from a dataset
+-filter
+-na.omit
+-distinct
+-mutate
+-case_when
+-group_by
+-summarize
+-grepl
+}
+
+filter{
+-Function that keeps only rows that meet criteria
++first arg is data frame
++second arg is condition(s) that must be met to keep the row
+-uses logical and boolean operators
+Ex's. 
+NewData <- Penguins|>filter(bill_length_mm >= 40)
+NewData <- Penguins |> filter(species == "Adelie" | species == "Gentoo")
+}
+
+distinc{
+  Function that finds all unique rows or combinations of vars
+  -first arg is data frame
+  -Following args are names of columns to find unique value combinations from
+}
+
+Mutate{
+  Function that defines and adds a new column calculated from existing columns
+  - Can define multiple new columns at once
+  -Can use more functions inside a mutate that do many complicated things
+  Ex.{
+  penguins2 <- penguins|> mutate(body_madd_lb = body_mass_g/453.6) |> mutate(bill_total = bill_length_mm+bill_depth_mm)
+}
+}
+
+mutate with case_when{
+  Create a new variable based on existing variable for discrete case
+  Ex.{
+  NewData <- OldData |> mutate(newvariable = case_when(   test ~ "value1",
+                                                          test2 ~ "value2",
+                                                            .default = "value3"))
+}
+}
+
+select{
+ Decide exactly which variables to include
+ Ex.{
+ penguins4 <- penguins3 |>
+                      select(species,
+                              island,
+                              size,
+                              sex,
+                              body_mass_lb)
+  penguins4 <- penguins3 |>
+                      select(-bill_total)
+  
+}
+}
+
+na.omit{
+  after you decide which variables to keep, only preserve rows that are complete
+  -make sure to run after selecting variables
+  -omits rows that have at least 1 NA value in any column
+}
+
+
+group_by/sumarize{
+  Group observations based on values of one variable, then generate summary statistics of other variables
+  Ex. 
+  penguins_sum <- penguins4 |>
+                        group_by(species, island) |>
+            summarize(n = n(), mean_mass = mean(body_mass_lb),                
+            prob_female = sum(sex == “female”)/n)
+
+}
+
+grepl{
+  Use as part of any logical test to see if entries contain a specific string of characters
+  Notice:
+  This line of code creates a new data frame , NewData, b keeping only rows with calues for Studentname that contain letters 'Dan'. Dan, Danielle, Daniel,etc.
+  Ex.{
+  NewCrimeData <- DenverCrimeData |>
+          filter(grepl("drug",offense_type_id)) |>
+          group_by(nbrhd_name) |>
+          summarize(n= n(),
+            drug_offense_pop = n/total_population)
+}
+}

@@ -1,0 +1,80 @@
+---
+title: "Group Project"
+output:
+  html_notebook
+---
+
+```{r}
+# Clear workspace
+rm(list = ls()) 
+
+# your code will NOT be included in the html for this assignment
+knitr::opts_chunk$set(echo=FALSE) 
+# your output will NOT be included in the html for this assignment (except figures at the end)
+knitr::opts_chunk$set(include=FALSE) 
+
+# load packages we need for this lab
+library(mosaic, warn.conflicts = FALSE) 
+library(ggformula, warn.conflicts = FALSE)
+library(Lock5Data, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+
+
+# Load your data
+CrimeDataRaw <- read.csv(file.choose())
+
+# Perform any necessary transformations
+
+
+```
+
+
+## Introduction
+
+*Introduce the dataset in your own words.  Discuss, briefly, the motivation and curiousity behind your choice of research questions.  *  
+  
+## Research Question 1
+
+*Write the research question in the section title and clearly detail any data manipulations you performed to be able to answer this research question. Do not include R code; use complete sentences to describe what you did. * 
+  
+   - *Write the relevant hypothesis test and clearly define the parameter of interest in the context of your research question.* 
+   - *Discuss what kind of data visualization you created for this question, and what you learned from it as it relates to the research question.  You will put this visualization at the end of the document.*
+  - *Introduce the inference procedure and report the p-value, as well as your conclusion in context.  Make sure you discuss the strength of the evidence.*
+  
+## Research Question 2
+
+*Write the research question in the section title and clearly detail any data manipulations you performed to be able to answer this research question. Do not include R code; use complete sentences to describe what you did. * 
+  
+   - *Write the relevant hypothesis test and clearly define the parameter of interest in the context of your research question.* 
+   - *Discuss what kind of data visualization you created for this question, and what you learned from it as it relates to the research question.  You will put this visualization at the end of the document.*
+  - *Introduce the inference procedure and report the p-value, as well as your conclusion in context.  Make sure you discuss the strength of the evidence.*
+  
+\newpage
+
+## Figures
+
+```{r, include = T}
+
+```
+
+```{r, include = T}
+
+```
+
+# Appendix
+
+*Put your R code to perform the hypothesis tests here.  It must appear in your report with the output*
+
+```{r, include = T, echo = T}
+
+
+
+```
+
+```{r, include = T, echo = T}
+
+```
+
+
+
+

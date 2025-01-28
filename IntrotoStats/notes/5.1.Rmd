@@ -1,0 +1,35 @@
+---
+title: "5.1Notes"
+output: html_notebook
+---
+
+Analyzing Paired data:
+- Randomized comparative experiment:
+  compare 2 independent groups,
+  each group receives a treatment, mew_1-mew_2 or p_1-p_2
+- Matched pairs experiment:
+  compare responses for the same group when receiving
+  2 different treatments, mew_d(mean of the difference).
+  mew_d = post.test - pre.test
+
+  mean of the difference: take difference and then take the mean
+
+  Examine differences between responses for each unit (pair), then create new variable of differences, then analyze differences using procedures for a single mean:
+
+  //D = Quiz - Lecture, muD is mean of D?
+
+  Note: dBar = xbar1-xbar2, but SE(dbar) != SE(X1bar-x2bar)
+
+dbar = sample mean of the differences, xbard
+CI: dBar +- t*(SE)
+SE = S(d)/sqrt(n)
+s(D) = sd of differences
+compare standardizedto a t(n-1) to get a p-value
+
+Things to notice:
+  dbar = difference in means
+  SE(dbar) < SE(difference in means)
+
+paired t-tests in R
+t.test(x1, x2, paired = T)
+t.test(~difference, data = DataSetName)

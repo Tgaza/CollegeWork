@@ -1,0 +1,189 @@
+---
+title: "Data Project: Worksheet"
+output: html_notebook
+---
+
+```{r, echo = F, message = F}
+# Clear workspace
+rm(list = ls()) 
+
+# your code will be included in the html for this assignment
+knitr::opts_chunk$set(echo=TRUE) 
+
+# load packages we need for this lab
+library(mosaic, warn.conflicts = FALSE) 
+library(ggformula, warn.conflicts = FALSE)
+library(Lock5Data, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+
+```
+
+
+# Premise
+
+The goal of this document is to help you organize your thoughts and your work-flow for the group data project.  
+
+*You will not submit this document*
+
+The goal of the project is to explore and wrangle an interesting data set, ultimately using it to answer two research questions.  The work will be done in a small group of 3-4. The deliverable is fully developed report that introduces the data, describes any data management/wrangling, introduces two research questions, provides insightful visualizations, and performs statistical inference to provide answers
+
+# Step 1:  Examine the codebook, load the data.
+
+The code book for the data is available as a handout in class and as a document in Canvas.  Look it over.  With your group, consider a few preliminary ideas about variables you might be particularly interested in, and what kinds of research questions might be appropriate.  You can use this space to write a few notes if you desire.
+
+
+
+
+### Requirements for your research questions:  
+
+  - Inference should not be performed with a variable that has more than 5 levels (unless it's day of the week or related to month).  You are welcome to take a variable with more levels and transform it to have fewer, or take a quantitative variable and create two or more categories.
+  - At least one research question must consider the relationship between two variables.
+  - One research question may be a chi-square goodness of fit test for a single categorical variable (no tests for a test for a single mean or single proportion).
+  - To earn full credit, you must ask at least one research question that requires data manipulation (filter, mutate, etc)
+
+Use the code-chunk below to load the data into the workspace and begin exploring your variables.  Hint:  look at data summaries, view a list of unique values for a variable, create some visualizations.  This should help you decide if you want to continue pursuing your original ideas or whether you want to modify them.  
+
+```{r}
+RawData <- read.csv(file.choose())
+
+
+
+```
+
+# Step 2: Write your research questions.
+
+Write down what your research questions, and translate them into the correct hypothesis tests.  Review the research question guidelines in step one if necessary
+
+```{r}
+glimpse(RawData)
+tally(~offense_type_id, data = RawData |> group_by(offense_type_id)|> filter(!(grepl("burg", offense_type_id)|
+                                            grepl("burglary", offense_type_id)|
+                                            grepl("theft", offense_type_id)|
+                                            grepl("robbery", offense_type_id)) & n()>=10))
+tally(~offense_type_id, data = RawData)
+```
+
+### Research Question 1:
+
+Is a Denver resident more likely to have burglary committed against them, over other crime, on a weekday compared to a day on the weekend?
+
+H0: p_nE - p_nD = 0
+
+Ha: p_nE - p_nD > 0
+
+
+p_nE is the normalized proportion of the p_E proportion, and p_nD is the normalized proportion of the p_D proportion.
+
+### Research Question 2:
+
+Does of the percent of males in a neighborhood affect the average assault crime per thousand person of the neighborhood? (where assault crime per person is the number of assault crimes divided by the number of people in the neighborhood)
+
+H0: There is no correlation between the percent of males in a neighborhood and the average assault per thousand? person
+
+Ha: There is correlation between the percent of males in a neighborhood and the average assault per thousand person
+
+
+
+
+Once you have your research questions, it is strongly recommended that you talk with your professor (*in lab*) about whether they can be answered with your data and what kind of data manipulation might be needed.  You should think carefully about what type of data wrangling you think should be done.  Your professor can help confirm your thoughts, or suggest different approaches.  It's possible you have a data wrangling idea that isn't directly covered by the content in lecture.  Your professor may be able to assist.
+
+# Step 3: Perform the data manipulations
+
+Use this space to manipulate the data in whatever way you deem necessary.  We suggest you select only the variables you need to perform your data analysis.
+
+```{r}
+q1DataA <- RawData |> select(incident_id, offense_type_id, day) |> #get rid of all variables other than those we care about
+            mutate(isAssault = case_when(grepl("aslt", offense_type_id)|grepl("assault", offense_type_id) ~ "Yes", #create new variable that is yes if the crime for the incident is Assault
+                                                        .default = "No")) |> #Otherwise no
+            mutate(isWeekend = case_when(grepl("Saturday", day)|grepl("Sunday", day) ~ "Yes", #create a new variable that is yes for weekend days
+                                                        .default = "No"))|> #Otherwise no
+            na.omit() #clean out bad data
+glimpse(q1DataA)
+tally(~isAssault, data = q1DataA)
+tally(~offense_type_id, data = q1DataA)
+gf_bar(day~isAssault, data = q1DataA, fill = ~isAssault, position = "fill")
+tally(isWeekend~isAssault, data = q1DataA)
+
+```
+```{r}
+q1DataB <- RawData |> select(incident_id, offense_type_id, day) |> #get rid of all variables other than those we care about
+            mutate(isDrug = case_when(grepl("drug", offense_type_id) ~ "Yes", #create new variable that is yes if the crime for the incident is a Burglary
+                                                        .default = "No")) |> #Otherwise no
+            mutate(isWeekend = case_when(grepl("Saturday", day)|grepl("Sunday", day) ~ "Yes", #create a new variable that is yes for weekend days
+                                                        .default = "No"))|> #Otherwise no
+            distinct(incident_id, offense_type_id, day, isDrug, isWeekend) |>
+            na.omit() #clean out bad data
+glimpse(q1DataB)
+tally(~isDrug, data = q1DataB)
+#tally(~offense_type_id, data = q1DataB)
+gf_bar(day~isDrug, data = q1DataB, fill = ~isDrug, position = "fill")
+tally(isWeekend~isDrug, data = q1DataB)
+```
+
+```{r}
+q2Data <- RawData |> select(offense_type_id, nbrhd_name, percent_male, total_population) |> filter(grepl("aslt", offense_type_id)|grepl("assault", offense_type_id))
+q2DataSummary <- q2Data |> mutate(nCrimes = sum())
+q2DataSummary
+```
+
+You should be able to clearly describe the data manipulations you perform, as well as the resulting variables.
+
+# Step 4:  Visualize your data
+
+Produce two visualizations that help you gain insight into the research questions from part 2 (one for each).  Think about what the visualizations tell you about your research question.
+
+```{r}
+
+```
+
+
+# Step 5: Perform inference (if appropriate)
+
+Confirm that it is appropriate to use a distribution to perform inference, then perform the inference using prop.test, t.test, cor.test, or xchisq.test.  You will need to do this twice, once for each research question.
+
+```{r}
+
+```
+
+
+# Step 6:  Communicate your results
+
+Based on the outcome of Step 5, you need to answer both your research questions.  
+
+
+
+# Step 7: Write the Report.
+
+Take everything you've done in this worksheet and organize it using the DataProjectReportTemplate.
+
+The text of your report must be less than *600 words*.  To check the word count, go to Edit -> Word Count.  The two figures will go at the end.
+
+You'll need to the follow sections (also described in the template):
+
+### Introduction: 
+
+Introduce the dataset in your own words.  Discuss, briefly, the motivation and curiousity behind your choice of research questions.  
+  
+### Research question 1:  
+
+Write the research question in the section title and clearly detail any data manipulations you performed to be able to answer this research question. Do not include R code; use complete sentences to describe what you did.  
+  
+   - Write the relevant hypothesis test and clearly define the parameter of interest in the context of your research question. 
+   - Discuss what kind of data visualization you created for this question, and what you learned from it as it relates to the research question.  You will put this visualization at the end of the document.
+  - Introduce the inference procedure and report the p-value, as well as your conclusion in context.  Make sure you discuss the strength of the evidence.
+      
+### Research question 1:  
+
+Write the research question in the section title and clearly detail any data manipulations you performed to be able to answer this research question. Do not include R code; use complete sentences to describe what you did.  
+  
+   - Write the relevant hypothesis test and clearly define the parameter of interest in the context of your research question. 
+   - Discuss what kind of data visualization you created for this question, and what you learned from it as it relates to the research question.  You will put this visualization at the end of the document.
+  - Introduce the inference procedure and report the p-value, as well as your conclusion in context.  Make sure you discuss the strength of the evidence.
+  
+### Figures
+
+One figure for each research questions in order.
+      
+      
+      
+  
