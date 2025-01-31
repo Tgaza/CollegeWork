@@ -1,5 +1,5 @@
 import networkx as nx
-
+import matplotlib.pyplot as plt
 
 class Maze:
     rows = 0
@@ -30,3 +30,12 @@ class Maze:
 
     def getEndNode(self):
         return self.endNode
+
+    def displayGraph(self):
+        print(self.baseGraph.nodes())
+        pos = {(x,y):(int(y),-int(x)) for x,y in self.baseGraph.nodes()}
+        nx.draw(self.baseGraph, pos=pos, 
+            node_color='lightgreen', 
+            with_labels=True,
+            node_size=600)
+        plt.show()
