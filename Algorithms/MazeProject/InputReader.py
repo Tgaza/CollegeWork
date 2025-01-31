@@ -29,56 +29,51 @@ class InputReader:
         # except the first row which will be [totalRows:int,totalCols:int,::,startRow:int,startCol:int,::,endRow:int,endCol:int]
         for dataRow in self.dataArray:
             if not firstLineProcessed:
-                totalRows = dataRow[0]
-                totalCols = dataRow[1]
-                startingNode = (dataRow[3], dataRow[4])
-                endNode = (dataRow[6], dataRow[7])
+                totalRows = int(dataRow[0])
+                totalCols = int(dataRow[1])
+                startingNode = (int(dataRow[3]), int(dataRow[4]))
+                endNode = (int(dataRow[6]), int(dataRow[7]))
                 firstLineProcessed = True
             else:
-                initialGraph.add_node((dataRow[0], dataRow[1]))
-                initialGraph.nodes[(dataRow[0],
-                                    dataRow[1])]["directions"] = dataRow[3:-2]
-                initialGraph.nodes[(dataRow[0],
-                                    dataRow[1])]["type"] = dataRow[-1]
+                x = int(dataRow[0])
+                y = int(dataRow[1])
+                initialGraph.add_node((x, y))
+                initialGraph.nodes[(x,
+                                    y)]["directions"] = dataRow[3:-2]
+                initialGraph.nodes[(x,
+                                    y)]["type"] = dataRow[-1]
                 weightedEdges = []
                 for direction in initialGraph.nodes[(
-                        dataRow[0], dataRow[1])]["directions"]:
+                        x, y)]["directions"]:
                     if direction == "N":
-                        weightedEdges.append(((dataRow[0], dataRow[1]),
-                                              (dataRow[0], dataRow[1] - 1), 1))
+                        weightedEdges.append(((x, y),
+                                              (x-1, y), 1))
                     elif direction == "NE":
                         weightedEdges.append((
-                            (dataRow[0], dataRow[1]),
-                            (dataRow[0] + 1, dataRow[1] - 1),
-                            1,
-                        ))
+                            (x, y),
+                            (x - 1, y + 1), 1))
                     elif direction == "E":
-                        weightedEdges.append(((dataRow[0], dataRow[1]),
-                                              (dataRow[0] + 1, dataRow[1]), 1))
+                        weightedEdges.append(((x, y),
+                                              (x, y + 1), 1))
                     elif direction == "SE":
                         weightedEdges.append((
-                            (dataRow[0], dataRow[1]),
-                            (dataRow[0] + 1, dataRow[1] + 1),
-                            1,
-                        ))
+                            (x, y),
+                            (x + 1, y + 1), 1))
                     elif direction == "S":
-                        weightedEdges.append(((dataRow[0], dataRow[1]),
-                                              (dataRow[0], dataRow[1] + 1), 1))
+                        weightedEdges.append(((x, y),
+                                              (x+1, y), 1))
                     elif direction == "SW":
                         weightedEdges.append((
-                            (dataRow[0], dataRow[1]),
-                            (dataRow[0] - 1, dataRow[1] + 1),
-                            1,
-                        ))
+                            (x, y),
+                            (x + 1, y - 1), 1))
                     elif direction == "W":
-                        weightedEdges.append(((dataRow[0], dataRow[1]),
-                                              (dataRow[0] - 1, dataRow[1]), 1))
+                        weightedEdges.append(((x, y),
+                                              (x, y - 1), 1))
                     elif direction == "NW":
                         weightedEdges.append((
-                            (dataRow[0], dataRow[1]),
-                            (dataRow[0] - 1, dataRow[1] - 1),
-                            1,
-                        ))
+                            (x, y),
+                            (x - 1, y - 1), 1))
+                initialGraph.add_weighted_edges_from(weightedEdges)
 
         return (initialGraph, totalRows, totalCols, startingNode, endNode)
 
