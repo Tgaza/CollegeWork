@@ -1,0 +1,17 @@
+4 4 :: 1 1 :: 4 4
+1 1 :: E S :: I
+1 2 :: E S SE :: N
+1 3 :: W S SE SW :: N
+1 4 :: W S :: D
+2 1 :: S SE E NE N :: N
+2 2 :: E W SE NW N :: N
+2 3 :: NW E S NE W :: N
+2 4 :: W SW :: D
+3 1 :: E SE NE :: N
+3 2 :: SW NW NE W S E N :: N
+3 3 :: N SW E S NE :: N
+3 4 :: W SW :: I
+4 1 :: E N NE :: I
+4 2 :: N E W :: D
+4 3 :: N NW W :: D
+4 4 :: X :: N

@@ -25,6 +25,7 @@ class InputReader:
         totalCols = 0
         startingNode = (0, 0)
         endNode = (0, 0)
+        baseStepSize = 1
         # each row array should be of format [row:int,col:int,::,N:string,E:string..,::,tiletype:char]
         # except the first row which will be [totalRows:int,totalCols:int,::,startRow:int,startCol:int,::,endRow:int,endCol:int]
         for dataRow in self.dataArray:
@@ -37,43 +38,33 @@ class InputReader:
             else:
                 x = int(dataRow[0])
                 y = int(dataRow[1])
-                initialGraph.add_node((x, y))
-                initialGraph.nodes[(x,
-                                    y)]["directions"] = dataRow[3:-2]
-                initialGraph.nodes[(x,
-                                    y)]["type"] = dataRow[-1]
-                weightedEdges = []
-                for direction in initialGraph.nodes[(
-                        x, y)]["directions"]:
-                    if direction == "N":
-                        weightedEdges.append(((x, y),
-                                              (x-1, y), 1))
-                    elif direction == "NE":
-                        weightedEdges.append((
-                            (x, y),
-                            (x - 1, y + 1), 1))
-                    elif direction == "E":
-                        weightedEdges.append(((x, y),
-                                              (x, y + 1), 1))
-                    elif direction == "SE":
-                        weightedEdges.append((
-                            (x, y),
-                            (x + 1, y + 1), 1))
-                    elif direction == "S":
-                        weightedEdges.append(((x, y),
-                                              (x+1, y), 1))
-                    elif direction == "SW":
-                        weightedEdges.append((
-                            (x, y),
-                            (x + 1, y - 1), 1))
-                    elif direction == "W":
-                        weightedEdges.append(((x, y),
-                                              (x, y - 1), 1))
-                    elif direction == "NW":
-                        weightedEdges.append((
-                            (x, y),
-                            (x - 1, y - 1), 1))
-                initialGraph.add_weighted_edges_from(weightedEdges)
+                initialGraph.add_node((x, y, baseStepSize))
+                initialGraph.nodes[(x, y, baseStepSize)]["directions"] = dataRow[3:-2]
+                initialGraph.nodes[(x, y, baseStepSize)]["type"] = dataRow[-1]
+                if (initialGraph.nodes[(x, y, baseStepSize)]["type"] != 'I' and initialGraph.nodes[(x, y, baseStepSize)]["type"] != 'D'):
+                    weightedEdges = []
+                    for direction in initialGraph.nodes[(x, y, baseStepSize)]["directions"]:
+                        if direction == "N":
+                            connectingNode = (x - baseStepSize, y, baseStepSize)
+                        elif direction == "NE":
+                            connectingNode = (x - baseStepSize, y + baseStepSize, baseStepSize)
+                        elif direction == "E":
+                            connectingNode = (x, y + baseStepSize, baseStepSize)
+                        elif direction == "SE":
+                            connectingNode = (x + baseStepSize, y + baseStepSize, baseStepSize)
+                        elif direction == "S":
+                            connectingNode = (x + baseStepSize, y, baseStepSize)
+                        elif direction == "SW":
+                            connectingNode = (x + baseStepSize, y - baseStepSize, baseStepSize)
+                        elif direction == "W":
+                            connectingNode = (x, y - baseStepSize, baseStepSize)
+                        elif direction == "NW":
+                            connectingNode = (x - baseStepSize, y - baseStepSize, baseStepSize)
+                        else:
+                            continue
+                        if (connectingNode[0] <= totalRows and connectingNode[1] <= totalCols and connectingNode[0] >= 1 and connectingNode[1] >= 1):
+                            weightedEdges.append(((x, y, baseStepSize), connectingNode, baseStepSize))
+                    initialGraph.add_weighted_edges_from(weightedEdges)
 
         return (initialGraph, totalRows, totalCols, startingNode, endNode)
 
